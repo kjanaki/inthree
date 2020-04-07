@@ -160,12 +160,12 @@ public class GrnDetailsActivity extends AppCompatActivity {
 
         recyclerViewAdapter.setOnScannerClick(new GrnProductAdapter.onScannerClick() {
             @Override
-            public void onClick(String product_id, boolean display_bbid, boolean display_imei_no, boolean display_serial_no) {
+            public void onClick(String product_id, boolean display_bbid, boolean display_imei_no, boolean display_serial_no,int required_qty,int total_qty) {
 
                 // Boolean is_valid = true;
                 //Boolean is_valid = validateGSTNumber(GSTN_number.getText().toString());
                 // if (is_valid) {
-                display_scanner_view(product_id, display_bbid, display_imei_no, display_serial_no);
+                display_scanner_view(product_id, display_bbid, display_imei_no, display_serial_no,required_qty,total_qty);
 //                } else {
 //                    Toast.makeText(GrnDetailsActivity.this, "Enter Valid GSTIN No", Toast.LENGTH_LONG).show();
 //                    ViewDialog alert = new ViewDialog();
@@ -193,7 +193,6 @@ public class GrnDetailsActivity extends AppCompatActivity {
 
             @Override
             public void update_data(int pos, GrnDetailResponse.GrnDetailsView.ProductModel pmodel) {
-
                 Product_list.set(pos, pmodel);
             }
 
@@ -207,7 +206,7 @@ public class GrnDetailsActivity extends AppCompatActivity {
         this.finish();
 
     }
-    private void display_scanner_view(String product_id, boolean display_bbid, boolean display_imei_no, boolean display_serial_no) {
+    private void display_scanner_view(String product_id, boolean display_bbid, boolean display_imei_no, boolean display_serial_no,int received_qty,int total_qty) {
         dialog = new Dialog(GrnDetailsActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         popUpView = getLayoutInflater().inflate(R.layout.scanlist_view,
@@ -226,6 +225,11 @@ public class GrnDetailsActivity extends AppCompatActivity {
         serial_txt_no = (EditText) popUpView.findViewById(R.id.serial_number_scan_value);
         bbid_no = (EditText) popUpView.findViewById(R.id.bbid_number_scan_value);
         imei_txt_no = (EditText) popUpView.findViewById(R.id.imei_scan_value);
+        TextView add_qty_txt = (TextView) popUpView.findViewById(R.id.added_qty);
+        TextView total_qty_txt = (TextView) popUpView.findViewById(R.id.total_qty);
+        add_qty_txt.setText(String.valueOf(received_qty));
+        total_qty_txt.setText(String.valueOf(total_qty));
+
 
         if (!display_bbid) {
             popUpView.findViewById(R.id.scan_bbid_layout).setVisibility(View.GONE);
@@ -344,18 +348,18 @@ public class GrnDetailsActivity extends AppCompatActivity {
                         }
                         if (!is_duplicate) {
                             is_duplicate = false;
-                            boolean show_hide = update_product_qty(bbid, imei_no, serial_no, edit_bbid, edit_imei, edit_serial, dialog);
-                            if (!show_hide)
-                                dialog.dismiss();
+                            boolean show_hide = update_product_qty(dialog,bbid, imei_no, serial_no, edit_bbid, edit_imei, edit_serial, dialog);
+//                            if (!show_hide)
+//                                dialog.dismiss();
                             hideKeyboard();
                         }
 
                         Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
                     } else {
                         is_duplicate = false;
-                        boolean show_hide = update_product_qty(bbid, imei_no, serial_no, edit_bbid, edit_imei, edit_serial, dialog);
-                        if (!show_hide)
-                            dialog.dismiss();
+                        boolean show_hide = update_product_qty(dialog,bbid, imei_no, serial_no, edit_bbid, edit_imei, edit_serial, dialog);
+//                        if (!show_hide)
+//                            dialog.dismiss();
                         hideKeyboard();
                     }
 
@@ -418,7 +422,7 @@ public class GrnDetailsActivity extends AppCompatActivity {
 //        return show_dialog;
 //    }
 
-    private boolean update_product_qty(String bbid, String imei_no, String serial_no, EditText edit_bbid, EditText edit_imei, EditText edit_serial, Dialog dialog) {
+    private boolean update_product_qty(Dialog current_dialog,String bbid, String imei_no, String serial_no, EditText edit_bbid, EditText edit_imei, EditText edit_serial, Dialog dialog) {
         Scanner_List p = new Scanner_List(bbid, imei_no, serial_no);
         boolean show_dialog = false;
         if (qr_scanner_list.containsKey(Selected_product_id)) {
@@ -440,31 +444,38 @@ public class GrnDetailsActivity extends AppCompatActivity {
             qr_scanner_list.put(Selected_product_id, new_added_list);
             show_dialog = false;
         }
-        String pos = null;
-        for (int i = 0; i < Product_list.size(); i++) {
-            if (Product_list.get(i).getProduct_id().equals(Selected_product_id.toString())) {
-                pos = (String.valueOf(i));
-                if (Product_list.get(i).getRecevied_qty() <= qr_scanner_list.get(Selected_product_id).size()) {
-                    int total_qty = (qr_scanner_list.get(Selected_product_id).size());
+        if(!show_dialog) {
+            String pos = null;
 
-                    Product_list.get(i).setRecevied_qty(total_qty);
-                    Product_list.get(i).setIs_product_model_match(true);
+            for (int i = 0; i < Product_list.size(); i++) {
+                if (Product_list.get(i).getProduct_id().equals(Selected_product_id.toString())) {
+                    pos = (String.valueOf(i));
+                    if (Product_list.get(i).getRecevied_qty() <= qr_scanner_list.get(Selected_product_id).size()) {
+                        int total_qty = (qr_scanner_list.get(Selected_product_id).size());
 
-                    // Product_list.get(i).setBarcode_value("");
-                    Product_list.get(i).setScanner_list(qr_scanner_list.get(Selected_product_id));
-                    break;
-                } else {
-                    Toast.makeText(getApplicationContext(), "You cannot Scan more than Ordered qty!", Toast.LENGTH_LONG).show();
+                        Product_list.get(i).setRecevied_qty(total_qty);
+                        Product_list.get(i).setIs_product_model_match(true);
+
+                        // Product_list.get(i).setBarcode_value("");
+                        Product_list.get(i).setScanner_list(qr_scanner_list.get(Selected_product_id));
+                        break;
+                    } else {
+                        Toast.makeText(getApplicationContext(), "You cannot Scan more than Ordered qty!", Toast.LENGTH_LONG).show();
+                    }
+
                 }
-
+            }
+            if (pos != null) {
+                // recyclerViewAdapter.UpdateData(Integer.parseInt(pos),Product_list.get(Integer.parseInt(pos)));
+                // recyclerViewAdapter.notifyItemChanged(Integer.parseInt(pos));
+                current_dialog.dismiss();
+                recyclerViewAdapter.update_position(pos);
+                recyclerViewAdapter.setData(Product_list);
+                hideKeyboard();
             }
         }
-        if (pos != null) {
-            // recyclerViewAdapter.UpdateData(Integer.parseInt(pos),Product_list.get(Integer.parseInt(pos)));
-            // recyclerViewAdapter.notifyItemChanged(Integer.parseInt(pos));
-            recyclerViewAdapter.setData(Product_list);
-            hideKeyboard();
-        }
+
+
         // recyclerViewAdapter.setData(Product_list);
 
         return show_dialog;

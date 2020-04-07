@@ -3,6 +3,7 @@ package com.src.inthree.Adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -11,11 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.src.inthree.GrnDetailsActivity;
@@ -37,6 +41,8 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
     List<GrnDetailResponse.GrnDetailsView.ProductModel> product_list_records;
     Context context;
     private onScannerClick mScannerClick;
+    String update_position= null;
+
 
 
     public GrnProductAdapter(List<GrnDetailResponse.GrnDetailsView.ProductModel> product_list) {
@@ -67,6 +73,10 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
         holder.product_model_value.setText((pomdel.getProduct_model_entered() == null) ? "" : pomdel.getProduct_model_entered());
         holder.item_code.setTag(position);
         //holder.getAdapterPosition()
+        if(pomdel.getProduct_model().equals("")){
+            pomdel.setIs_product_model_match(true);
+            holder.product_model_layout.setVisibility(View.GONE);
+        }
         holder.received_qty.setText(String.valueOf(pomdel.getRecevied_qty()));
         holder.req_qty.setText(String.valueOf(pomdel.getReq_qty()));
         if(pomdel.isIs_product_model_match()){
@@ -89,17 +99,6 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
 
         }
         holder.qrcode_recevied_cqty.setVisibility(View.GONE);
-//        //holder.barcodevalue.setText((pomdel.getBarcode_value() == null) ? "" : pomdel.getBarcode_value());
-//         holder.received_qty.setEnabled(false);
-//        //holder.received_qty.isFocusable = true;
-//        holder.received_qty.setFocusable(false);
-//        if(!pomdel.isDisplay_scanner()){
-//               holder.qrcode_recevied_cqty.setVisibility(View.GONE);
-//            holder.received_qty.setEnabled(true);
-//            //holder.received_qty.isFocusable = true;
-//            holder.received_qty.setFocusable(true);
-//
-//           }
 
         if(pomdel.isDisplay_scanner())
         {
@@ -122,7 +121,13 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
                         GrnDetailResponse.GrnDetailsView.ProductModel pomdel_v = product_list_records.get(f);
 
                         mScannerClick.Check_receviec_qty(pomdel_v, entered_qty, required_qty);
-
+                        ///pomdel_v.getRecevied_qty(),pomdel_v.getRecevied_qty()
+                        if(update_position!=null && (Integer.parseInt(update_position)==f)) {
+                            update_position=null;
+                            if (pomdel_v.isDisplay_scanner() && ((pomdel_v.getRecevied_qty()) < pomdel_v.getReq_qty())) {
+                                holder.qrcode_recevied_cqty.callOnClick();
+                            }
+                        }
                     }
                 }
 
@@ -145,6 +150,7 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
 
         holder.product_model_value.addTextChangedListener(new TextWatcher() {
 
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() != 0) {
@@ -203,7 +209,7 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
                         boolean display_serial_no = pomdel_v.getCapture_serial_no();
                         if (pomdel_v.isIs_product_model_match()) {
                             if(pomdel_v.getRecevied_qty()< pomdel_v.getReq_qty()) {
-                                mScannerClick.onClick(pomdel_v.getProduct_id(), display_bbid, display_imei_no, display_serial_no);
+                                mScannerClick.onClick(pomdel_v.getProduct_id(), display_bbid, display_imei_no, display_serial_no,pomdel_v.getRecevied_qty(), pomdel_v.getReq_qty());
                             }else{
                                 mScannerClick.Check_receviec_qty(pomdel_v, pomdel_v.getRecevied_qty(), pomdel_v.getReq_qty());
                             }
@@ -219,6 +225,10 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
     @Override
     public int getItemCount() {
         return this.product_list_records.size();
+    }
+
+    public void  update_position(String poss){
+        this.update_position  = poss;
     }
 
     public void setData(List<GrnDetailResponse.GrnDetailsView.ProductModel> data) {
@@ -241,6 +251,7 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
         public TextView product_name, item_code, product_model_value,req_qty;
         EditText received_qty;
         public ImageView qrcode_recevied_cqty,product_image;
+        LinearLayout product_model_layout;
 
         public ViewHolder(View view) {
             super(view);
@@ -251,6 +262,7 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
             req_qty = (TextView) view.findViewById(R.id.req_qty);
             qrcode_recevied_cqty = (ImageView) view.findViewById(R.id.qrcode_recevied_cqty);
             product_image =(ImageView)view.findViewById(R.id.product_image);
+            product_model_layout =(LinearLayout)view.findViewById(R.id.product_model_layout);
             ///barcodevalue = (TextView)view.findViewById(R.id.barcodevalue);
 
         }
@@ -263,7 +275,7 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
 
 
     public interface onScannerClick{
-        void onClick(String product_id,boolean display_bbid,boolean display_imei_no,boolean display_serial_no);
+        void onClick(String product_id, boolean display_bbid, boolean display_imei_no, boolean display_serial_no, int recevied_qty, int req_qty);
         void Check_receviec_qty(GrnDetailResponse.GrnDetailsView.ProductModel pmodel,int entered_qty, int required_qty);
         void  update_data(int pos,GrnDetailResponse.GrnDetailsView.ProductModel pmodel);
        // void validate_product_model(GrnDetailResponse.GrnDetailsView.ProductModel pomdel, String product_model, String product_model_value);

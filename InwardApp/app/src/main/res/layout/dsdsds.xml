@@ -66,17 +66,46 @@
             android:textSize="14sp"
             android:visibility="visible" />
 
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="13dp"
+        android:paddingBottom="3dp">
+
+        <TextView
+            style="@style/novaRegularStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
+
+            android:text="Grn Date : "
+            android:textColor="#ffffffff"
+            android:textSize="14sp"
+
+            />
+
+
         <TextView
             android:id="@+id/grn_date"
             style="@style/novaRegularStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="02 Nov 2018"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_below="@+id/txtProductName"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="5dp"
+            android:text="PO 23462834234"
             android:textColor="#ffffffff"
             android:textSize="14sp"
-
-            />
+            android:visibility="visible" />
 
 
     </LinearLayout>
@@ -109,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_below="@+id/txtProductName"
-            android:layout_marginLeft="28dp"
+            android:layout_marginLeft="38dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="5dp"
             android:text="PO 23462834234"
@@ -145,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_below="@+id/txtProductName"
-            android:layout_marginLeft="38dp"
+            android:layout_marginLeft="35dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="6dp"
             android:text="12 Nov 2018"
@@ -183,7 +212,7 @@
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_below="@+id/txtProductName"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="5dp"
             style="@style/novaRegularStyle"

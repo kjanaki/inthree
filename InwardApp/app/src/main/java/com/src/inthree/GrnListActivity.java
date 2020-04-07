@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,7 +63,16 @@ public class GrnListActivity extends AppCompatActivity {
         setContentView(R.layout.grn_list_activity);
         ButterKnife.bind(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Purchase");
         setSupportActionBar(toolbar);
+//        if(getSupportActionBar()!=null){
+//            Drawable drawable= getResources().getDrawable(R.drawable.ic_launcher_background);
+//            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+//            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 50, 50, true));
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+//
+//        }
         init_component();
 
     }
@@ -108,7 +120,7 @@ public class GrnListActivity extends AppCompatActivity {
         grn_list_filter = new ArrayList<>();
         // case insensitive search
         for (GrnListResponse.GrnModel list : grn_list_full) {
-            if (list.getGrn_no().contains(query.toLowerCase())) {
+            if (list.getGrn_no().contains(query.toLowerCase()) ||list.getPo_order_number().contains(query.toLowerCase())) {
                 grn_list_filter.add(list);
             }
         }
@@ -159,26 +171,29 @@ public class GrnListActivity extends AppCompatActivity {
 
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_logout:
-                SharedPreferences prefs = getSharedPreferences("WHApp", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.clear();
-                editor.apply();
-                finish();
-                break;
-
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()){
+//            case R.id.action_logout:
+//                SharedPreferences prefs = getSharedPreferences("WHApp", Context.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = prefs.edit();
+//                editor.clear();
+//                editor.apply();
+//                Intent i = new Intent(GrnListActivity.this,MainActivity.class);
+//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(i);
+//
+//                break;
+//
+//            default:
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 }

@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("WHApp", Context.MODE_PRIVATE);
         String user_id = prefs.getString("login_user_id", "");
         if (user_id != "" && user_id != null) {
-            Intent i = new Intent(MainActivity.this, FirstPage.class);
+            Intent i = new Intent(MainActivity.this, Dashboard.class);
             i.putExtra("login_user_id", user_id);
             editor.putString("login_user_id", user_id);
             editor.commit();
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 String user_id = response.body().getUser_id();
                 if (login_status.equals("success")) {
                    // Toast.makeText(getApplicationContext(), "Login Success!!", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(MainActivity.this, FirstPage.class);
+                    Intent i = new Intent(MainActivity.this, Dashboard.class);
                     i.putExtra("login_user_id", user_id);
                     editor.putString("login_user_id", user_id);
                     editor.commit();
