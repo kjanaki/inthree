@@ -1,9 +1,12 @@
 package com.src.inthree;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         if (!mUsername.getText().toString().isEmpty() && !mPassword.getText().toString().isEmpty()) {
             hideKeyboard();
             progressDialog = new ProgressDialog(MainActivity.this);
-            progressDialog.setTitle("ProgressDialog");
+            progressDialog.setTitle("");
             progressDialog.setMessage("Loading...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -95,7 +98,34 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.getProgress();
             progressDialog.setCancelable(false);
             progressDialog.show();
-            Check_login();
+            boolean connected = false;
+            ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                //we are connected to a network
+                connected = true;
+            }
+            if(connected) {
+                Check_login();
+            }
+            else{
+
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                // setup the alert builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Message");
+                builder.setMessage("No Internet Connection. Kindly check your connectivity");
+                // add the buttons
+                builder.setPositiveButton("Continue", null);
+                builder.setNegativeButton("Cancel", null);
+
+                // create and show the alert dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+            }
+
 
         } else {
             login_error.setVisibility(View.VISIBLE);
@@ -131,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent i = new Intent(MainActivity.this, Dashboard.class);
                     i.putExtra("login_user_id", user_id);
                     editor.putString("login_user_id", user_id);
+                    editor.putString("login_user_name", mUsername.getText().toString().trim());
                     editor.commit();
                     startActivity(i);
                 } else {

@@ -73,15 +73,17 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
         holder.product_model_value.setText((pomdel.getProduct_model_entered() == null) ? "" : pomdel.getProduct_model_entered());
         holder.item_code.setTag(position);
         //holder.getAdapterPosition()
+
+        holder.received_qty.setText(String.valueOf(pomdel.getRecevied_qty()));
+        holder.req_qty.setText(String.valueOf(pomdel.getReq_qty()));
         if(pomdel.getProduct_model().equals("")){
             pomdel.setIs_product_model_match(true);
             holder.product_model_layout.setVisibility(View.GONE);
         }
-        holder.received_qty.setText(String.valueOf(pomdel.getRecevied_qty()));
-        holder.req_qty.setText(String.valueOf(pomdel.getReq_qty()));
         if(pomdel.isIs_product_model_match()){
             holder.product_model_value.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_done_black_24dp, 0);
-
+            if(!pomdel.getProduct_model().equals("")){
+            holder.product_model_layout.setVisibility(View.VISIBLE);}
 
         }
         else{
@@ -161,7 +163,7 @@ public class GrnProductAdapter extends RecyclerView.Adapter<GrnProductAdapter.Vi
                         GrnDetailResponse.GrnDetailsView.ProductModel pomdel_v = product_list_records.get(f);
                         String product_model = pomdel_v.getProduct_model().toString();
                         String product_model_value = s.toString();//holder.product_model_value.getText().toString();
-                        if (product_model.equals(product_model_value)) {
+                        if (product_model.equalsIgnoreCase(product_model_value)) {
                             holder.product_model_value.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_done_black_24dp, 0);
                             pomdel_v.setProduct_model_entered(product_model_value);
                             pomdel_v.setIs_product_model_match(true);

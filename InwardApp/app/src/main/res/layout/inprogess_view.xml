@@ -18,26 +18,28 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <TextView
-            android:layout_width="263dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="60dp"
-            android:paddingLeft="2dp"
-            android:text="Activity are inProgress.....   "
-            android:textColor="#3D3933"
-            android:textSize="24sp" />
+<!--        <TextView-->
+<!--            android:layout_width="263dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="70dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginRight="60dp"-->
+<!--            android:paddingLeft="2dp"-->
+<!--            android:text="Activity are inProgress.....   "-->
+<!--            android:textColor="#3D3933"-->
+<!--            android:textSize="24sp" />-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/idealoading">
+
+        </ImageView>
     </LinearLayout>
 
 

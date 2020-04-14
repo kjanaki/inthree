@@ -40,25 +40,16 @@
 
 
     </TextView>
-    <TextView
-        style="@style/normaltext"
-        android:id="@+id/Po_text"
 
-        android:layout_below="@+id/mesg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#00E7DFDF"
-        android:gravity="center_horizontal"
-        android:text="GRN 5435435"/>
     <TextView
         style="@style/normaltext"
         android:id="@+id/text"
-        android:layout_below="@+id/Po_text"
+        android:layout_below="@+id/mesg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:background="#00E7DFDF"
-        android:gravity="center_horizontal"
-        android:text="GRN 5435435"/>
+        android:gravity="fill_horizontal"
+        android:text="GRN 14136 Scannned details updated successfully!"/>
 
 
     <Button

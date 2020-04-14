@@ -71,197 +71,368 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:paddingBottom="3dp">
 
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/grn_date_txt"
             style="@style/novaRegularStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
-
-            android:text="Grn Date : "
-            android:textColor="#ffffffff"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
             android:textSize="14sp"
-
-            />
-
+            android:textColor="#ffffffff"
+            android:layout_toLeftOf="@+id/grn_date"
+            android:text="Grn Date : " />
 
         <TextView
             android:id="@+id/grn_date"
             style="@style/novaRegularStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_below="@+id/txtProductName"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="5dp"
-            android:text="PO 23462834234"
-            android:textColor="#ffffffff"
+            android:layout_alignBaseline="@+id/grn_date_txt"
+            android:layout_alignBottom="@+id/grn_date_txt"
+            android:layout_alignParentRight="true"
             android:textSize="14sp"
-            android:visibility="visible" />
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffffff"
+            android:text="01-04-2020"/>
+    </RelativeLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="13dp"-->
+<!--        android:paddingBottom="3dp">-->
+
+<!--        <TextView-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+
+<!--            android:text="Grn Date : "-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:textSize="14sp"-->
+
+<!--            />-->
 
 
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/grn_date"-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_below="@+id/txtProductName"-->
+<!--            android:layout_marginLeft="50dp"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:text="PO 23462834234"-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:textSize="14sp"-->
+<!--            android:visibility="visible" />-->
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:paddingBottom="3dp">
 
+<!--    </LinearLayout>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/order_number_txt"
             style="@style/novaRegularStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
-
-            android:text="PO Order #: "
-            android:textColor="#ffffffff"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
             android:textSize="14sp"
-
-            />
-
+            android:textColor="#ffffffff"
+            android:layout_toLeftOf="@+id/order_number"
+            android:text="PO Order # : " />
 
         <TextView
             android:id="@+id/order_number"
             style="@style/novaRegularStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_below="@+id/txtProductName"
-            android:layout_marginLeft="38dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="5dp"
-            android:text="PO 23462834234"
-            android:textColor="#ffffffff"
+            android:layout_alignBaseline="@+id/order_number_txt"
+            android:layout_alignBottom="@+id/order_number_txt"
+            android:layout_alignParentRight="true"
             android:textSize="14sp"
-            android:visibility="visible" />
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffffff"
+            android:text="10004338"/>
+    </RelativeLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="13dp"-->
+<!--        android:paddingBottom="3dp">-->
+
+<!--        <TextView-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+
+<!--            android:text="PO Order #: "-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:textSize="14sp"-->
+
+<!--            />-->
 
 
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/order_number"-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_below="@+id/txtProductName"-->
+<!--            android:layout_marginLeft="38dp"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:text="PO 23462834234"-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:textSize="14sp"-->
+<!--            android:visibility="visible" />-->
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:paddingBottom="3dp">
 
+<!--    </LinearLayout>-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/order_date_txt"
             style="@style/novaRegularStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="5dp"
-            android:text="Order Date : "
-            android:textColor="#ffffffff"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
             android:textSize="14sp"
-
-            />
-
+            android:textColor="#ffffffff"
+            android:layout_toLeftOf="@+id/order_date"
+            android:text="Order Date : " />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_below="@+id/txtProductName"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="6dp"
-            android:text="12 Nov 2018"
             android:id="@+id/order_date"
             style="@style/novaRegularStyle"
-            android:textColor="#ffffffff"
-            android:textSize="14dp"
-            android:visibility="visible" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:paddingBottom="3dp">
-
-        <TextView
-            style="@style/novaRegularStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
-            android:text="Invoice Number : "
+            android:layout_alignBaseline="@+id/order_date_txt"
+            android:layout_alignBottom="@+id/order_date_txt"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:text="01-04-2020"
             android:textColor="#ffffffff"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="13dp"-->
+<!--        android:paddingBottom="3dp">-->
+
+<!--        <TextView-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:text="Order Date : "-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:textSize="14sp"-->
+
+<!--            />-->
+
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_below="@+id/txtProductName"-->
+<!--            android:layout_marginLeft="35dp"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="6dp"-->
+<!--            android:text="12 Nov 2018"-->
+<!--            android:id="@+id/order_date"-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:textSize="14dp"-->
+<!--            android:visibility="visible" />-->
+
+
+<!--    </LinearLayout>-->
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/invoice_number_txt"
+            style="@style/novaRegularStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
             android:textSize="14sp"
-
-            />
-
+            android:textColor="#ffffffff"
+            android:layout_toLeftOf="@+id/invoice_number"
+            android:text="Invoice Number : " />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_below="@+id/txtProductName"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="5dp"
-            style="@style/novaRegularStyle"
-            android:text="INV 23432423"
             android:id="@+id/invoice_number"
-            android:textColor="#ffffffff"
-            android:textSize="14dp"
-            android:visibility="visible" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:paddingBottom="3dp">
-
-        <TextView
             style="@style/novaRegularStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="5dp"
-            android:text="Invoice Date : "
-            android:textColor="#ffffffff"
+            android:layout_alignBaseline="@+id/invoice_number_txt"
+            android:layout_alignBottom="@+id/invoice_number_txt"
+            android:layout_alignParentRight="true"
             android:textSize="14sp"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffffff"
+            android:text="12345675"/>
+    </RelativeLayout>
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="13dp"-->
+<!--        android:paddingBottom="3dp">-->
 
-            />
+<!--        <TextView-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:text="Invoice Number : "-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:textSize="14sp"-->
+
+<!--            />-->
 
 
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_below="@+id/txtProductName"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:text="INV 23432423"-->
+<!--            android:id="@+id/invoice_number"-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:textSize="14dp"-->
+<!--            android:visibility="visible" />-->
+
+
+<!--    </LinearLayout>-->
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content">
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/invoice_date_txt"
+            style="@style/novaRegularStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_below="@+id/txtProductName"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="6dp"
-            android:text="12 Nov 2018"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:textSize="14sp"
             android:textColor="#ffffffff"
+            android:layout_toLeftOf="@+id/invoice_date"
+            android:text="Invoice Date :  " />
+
+        <TextView
             android:id="@+id/invoice_date"
-            android:textSize="14dp"
             style="@style/novaRegularStyle"
-            android:visibility="visible" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/invoice_date_txt"
+            android:layout_alignBottom="@+id/invoice_date_txt"
+            android:layout_alignParentRight="true"
+            android:textSize="14sp"
+            android:layout_marginRight="20dp"
+            android:textColor="#ffffffff"
+            android:text="01-04-2020"/>
+    </RelativeLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="13dp"-->
+<!--        android:paddingBottom="3dp">-->
+
+<!--        <TextView-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:text="Invoice Date : "-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:textSize="14sp"-->
+
+<!--            />-->
 
 
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignWithParentIfMissing="true"-->
+<!--            android:layout_below="@+id/txtProductName"-->
+<!--            android:layout_marginLeft="32dp"-->
+<!--            android:layout_marginTop="2dp"-->
+<!--            android:layout_marginBottom="6dp"-->
+<!--            android:text="12 Nov 2018"-->
+<!--            android:textColor="#ffffffff"-->
+<!--            android:id="@+id/invoice_date"-->
+<!--            android:textSize="14dp"-->
+<!--            style="@style/novaRegularStyle"-->
+<!--            android:visibility="visible" />-->
+
+
+
+<!--    </LinearLayout>-->
 
 
 </LinearLayout>

@@ -94,7 +94,7 @@
                 <EditText
                     android:id="@+id/product_model_value"
                     android:layout_width="match_parent"
-                    android:layout_height="27dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/edit_rectangle"
                     android:gravity="start"
                     android:includeFontPadding="false"

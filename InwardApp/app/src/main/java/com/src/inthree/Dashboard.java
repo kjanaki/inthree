@@ -11,20 +11,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.src.inthree.Adapter.DashboardGridAdapter;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class Dashboard extends AppCompatActivity {
 
     String user_id = "";
+    String user_name = "";
+    @BindView(R.id.user_name)
+    TextView user_name_txt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
+        ButterKnife.bind(this);
 
         String[] web = {
                 "Purchase",
@@ -32,7 +41,7 @@ public class Dashboard extends AppCompatActivity {
                 "Stock",
                 "Check List",
                 "Search",
-                "Settings",
+                "Logout",
 
 
         };
@@ -42,7 +51,7 @@ public class Dashboard extends AppCompatActivity {
                 R.drawable.stock,
                 R.drawable.checklist_img,
                 R.drawable.search,
-                R.drawable.setting,
+                R.drawable.logout_im,
 
         };
         DashboardGridAdapter adapter = new DashboardGridAdapter(Dashboard.this, web, imageId);
@@ -51,6 +60,8 @@ public class Dashboard extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("WHApp", Context.MODE_PRIVATE);
 
         user_id = prefs.getString("login_user_id", "");
+        user_name = prefs.getString("login_user_name", "");
+        user_name_txt.setText(user_name);
 
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,13 +83,14 @@ public class Dashboard extends AppCompatActivity {
                         break;
 
                     case 2:
-                        i = new Intent(Dashboard.this, ChecklistActivity.class);
+                        i = new Intent(Dashboard.this, StockActivity.class);
                         i.putExtra("login_user_id", user_id);
+
                         startActivity(i);
                         break;
 
                     case 3:
-                        i = new Intent(Dashboard.this, StockActivity.class);
+                        i = new Intent(Dashboard.this, ChecklistActivity.class);
                         i.putExtra("login_user_id", user_id);
                         startActivity(i);
                         break;

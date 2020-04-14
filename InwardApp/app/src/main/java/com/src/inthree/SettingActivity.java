@@ -24,6 +24,8 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.configuration);
         ButterKnife.bind(this);
+
+        logout_layout.callOnClick();
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Settings ");
         setSupportActionBar(toolbar);

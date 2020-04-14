@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -51,6 +54,8 @@ import com.src.inthree.model.GrnDetailRequest;
 import com.src.inthree.model.GrnDetailResponse;
 import com.src.inthree.model.ProductReceivedResponse;
 import com.src.inthree.model.Scanner_List;
+
+import org.json.JSONStringer;
 
 import java.io.File;
 import java.io.IOException;
@@ -162,17 +167,8 @@ public class GrnDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(String product_id, boolean display_bbid, boolean display_imei_no, boolean display_serial_no,int required_qty,int total_qty) {
 
-                // Boolean is_valid = true;
-                //Boolean is_valid = validateGSTNumber(GSTN_number.getText().toString());
-                // if (is_valid) {
                 display_scanner_view(product_id, display_bbid, display_imei_no, display_serial_no,required_qty,total_qty);
-//                } else {
-//                    Toast.makeText(GrnDetailsActivity.this, "Enter Valid GSTIN No", Toast.LENGTH_LONG).show();
-//                    ViewDialog alert = new ViewDialog();
-//                    String errormsg = "Enter Valid GSTIN No";
-//                    alert.displayError(errormsg);
-//
-//                }
+
             }
 
             @Override
@@ -184,7 +180,7 @@ public class GrnDetailsActivity extends AppCompatActivity {
                     alert.displayError(error);
                 } else {
                     pmodel.setRecevied_qty(entered_qty);
-                    // Product_list.set(pos,pmodel);
+
                 }
                 if (entered_qty > 0) {
                     add_min_qty = true;
@@ -198,7 +194,35 @@ public class GrnDetailsActivity extends AppCompatActivity {
 
 
         });
-        load_product_list();
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        }
+        if(connected){
+            load_product_list();
+        }
+        else{
+
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+            // setup the alert builder
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setTitle("Message");
+            builder.setMessage("No Internet Connection.  Kindly check your connectivity");
+
+            // add the buttons
+            builder.setPositiveButton("Continue", null);
+            builder.setNegativeButton("Cancel", null);
+
+            // create and show the alert dialog
+            android.app.AlertDialog dialog = builder.create();
+            dialog.show();
+
+
+        }
+
     }
 
     @OnClick({R.id.back_btn})
@@ -214,7 +238,7 @@ public class GrnDetailsActivity extends AppCompatActivity {
         dialog.setContentView(popUpView);
 
 
-        dialog.getWindow().setLayout(RecyclerView.LayoutParams.FILL_PARENT, 500);
+        dialog.getWindow().setLayout(RecyclerView.LayoutParams.FILL_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
         dialog.show();
 
         Selected_product_id = Integer.parseInt(product_id);
@@ -226,11 +250,11 @@ public class GrnDetailsActivity extends AppCompatActivity {
         bbid_no = (EditText) popUpView.findViewById(R.id.bbid_number_scan_value);
         imei_txt_no = (EditText) popUpView.findViewById(R.id.imei_scan_value);
         TextView add_qty_txt = (TextView) popUpView.findViewById(R.id.added_qty);
-        TextView total_qty_txt = (TextView) popUpView.findViewById(R.id.total_qty);
-        add_qty_txt.setText(String.valueOf(received_qty));
-        total_qty_txt.setText(String.valueOf(total_qty));
+        //TextView total_qty_txt = (TextView) popUpView.findViewById(R.id.total_qty);
+        add_qty_txt.setText(String.valueOf(received_qty+1)+" / "+String.valueOf(total_qty));
+       // total_qty_txt.setText(String.valueOf(total_qty));
 
-
+       // display_bbid = true;
         if (!display_bbid) {
             popUpView.findViewById(R.id.scan_bbid_layout).setVisibility(View.GONE);
         }
@@ -283,6 +307,7 @@ public class GrnDetailsActivity extends AppCompatActivity {
                         serial_txt_no.setError("Please fill details");
                         process_req = false;
                     }
+
                 }
                 if (display_imei_no) {
                     if (imei_no.length() == 0 || imei_no.equals("Scanned Nothing!")) {
@@ -290,8 +315,57 @@ public class GrnDetailsActivity extends AppCompatActivity {
                         process_req = false;
                     }
                 }
+
                 if (process_req) {
-                    check_duplicate_serial_no(bbid, imei_no, serial_no, display_bbid, display_serial_no, display_imei_no, bbid_no, imei_txt_no, serial_txt_no, dialog);
+
+
+
+                    boolean connected = false;
+                    ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                    if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                            connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                        //we are connected to a network
+                        connected = true;
+                    }
+                    if(connected){
+                        boolean is_local_duplicate =false;
+
+                        if((bbid.length()>0 && imei_no.length()>0) &&(bbid.equals(imei_no)))
+                        {
+                            is_local_duplicate =true;
+                            bbid_no.setError("Duplicate");
+                            imei_txt_no.setError("Duplicate");
+                        }
+                        if((bbid.length()>0 && serial_no.length()>0) &&(bbid.equals(serial_no)))
+                        {
+                            is_local_duplicate =true;
+                            bbid_no.setError("Duplicate");
+                            serial_txt_no.setError("Duplicate");
+                        }
+                        if((imei_no.length()>0 && serial_no.length()>0) &&(imei_no.equals(serial_no)))
+                        {
+                            is_local_duplicate =true;
+                            imei_txt_no.setError("Duplicate");
+                            serial_txt_no.setError("Duplicate");
+
+                        }
+                        if(!is_local_duplicate)
+                            check_duplicate_serial_no(bbid, imei_no, serial_no, display_bbid, display_serial_no, display_imei_no, bbid_no, imei_txt_no, serial_txt_no, dialog);
+                    }
+                    else{
+                        // setup the alert builder
+                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(GrnDetailsActivity.this);
+                        builder.setTitle("Message");
+                        builder.setMessage("No Internet Connection.  Kindly check your connectivity");
+
+                        // add the buttons
+                        builder.setPositiveButton("Continue", null);
+                        builder.setNegativeButton("Cancel", null);
+
+                        // create and show the alert dialog
+                        android.app.AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
                 }
 
             }
@@ -310,6 +384,8 @@ public class GrnDetailsActivity extends AppCompatActivity {
     private synchronized void check_duplicate_serial_no(String bbid, String imei_no, String serial_no, boolean display_bbid, boolean display_serial_no, boolean display_imei_no, EditText edit_bbid, EditText edit_imei, EditText edit_serial, Dialog dialog) {
         String message = "";
         // Call the API and load the details view of PO order
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Api.BoonBox_URL)
                 .addConverterFactory(GsonConverterFactory.create()) //Here we are using the GsonConverterFactory to directly convert json data to object
@@ -346,8 +422,13 @@ public class GrnDetailsActivity extends AppCompatActivity {
                             is_duplicate = true;
                             serial_txt_no.setError("Already exist");
                         }
+
+
+
                         if (!is_duplicate) {
                             is_duplicate = false;
+
+
                             boolean show_hide = update_product_qty(dialog,bbid, imei_no, serial_no, edit_bbid, edit_imei, edit_serial, dialog);
 //                            if (!show_hide)
 //                                dialog.dismiss();
@@ -379,52 +460,12 @@ public class GrnDetailsActivity extends AppCompatActivity {
 
     }
 
-//    private boolean update_product_qty(String bbid, String imei_no, String serial_no, EditText edit_bbid, EditText edit_imei, EditText edit_serial, Dialog dialog) {
-//        Scanner_List p = new Scanner_List(bbid, imei_no, serial_no);
-//        boolean show_dialog = false;
-//        if (qr_scanner_list.containsKey(Selected_product_id)) {
-//            List<Scanner_List> already_added_list = qr_scanner_list.get(Selected_product_id);
-//            if (!already_added_list.contains(p)) {
-//                already_added_list.add(p);
-//                show_dialog = false;
-//
-//            } else {
-//                Toast.makeText(getApplicationContext(), "Scanned Already!", Toast.LENGTH_LONG).show();
-//                edit_bbid.setError("Already scanned");
-//                edit_imei.setError("Already scanned");
-//                edit_serial.setError("Already scanned");
-//                show_dialog = true;
-//            }
-//        } else {
-//            List<Scanner_List> new_added_list = new ArrayList<>();
-//            new_added_list.add(p);
-//            qr_scanner_list.put(Selected_product_id, new_added_list);
-//            show_dialog = false;
-//        }
-//
-//        for (int i = 0; i < Product_list.size(); i++) {
-//            if (Product_list.get(i).getProduct_id().equals(Selected_product_id.toString())) {
-//                if (Product_list.get(i).getRecevied_qty() <= qr_scanner_list.get(Selected_product_id).size()) {
-//                    int total_qty = (qr_scanner_list.get(Selected_product_id).size());
-//
-//                    Product_list.get(i).setRecevied_qty(total_qty);
-//                    //Product_list.get(i).setBarcode_value("");
-//                    Product_list.get(i).setScanner_list(qr_scanner_list.get(Selected_product_id));
-//                    break;
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "You cannot Scan more than Ordered qty!", Toast.LENGTH_LONG).show();
-//                }
-//
-//            }
-//        }
-//        recyclerViewAdapter.setData(Product_list);
-//
-//        return show_dialog;
-//    }
+
 
     private boolean update_product_qty(Dialog current_dialog,String bbid, String imei_no, String serial_no, EditText edit_bbid, EditText edit_imei, EditText edit_serial, Dialog dialog) {
         Scanner_List p = new Scanner_List(bbid, imei_no, serial_no);
         boolean show_dialog = false;
+
         if (qr_scanner_list.containsKey(Selected_product_id)) {
             List<Scanner_List> already_added_list = qr_scanner_list.get(Selected_product_id);
             if (!already_added_list.contains(p)) {
@@ -444,6 +485,7 @@ public class GrnDetailsActivity extends AppCompatActivity {
             qr_scanner_list.put(Selected_product_id, new_added_list);
             show_dialog = false;
         }
+
         if(!show_dialog) {
             String pos = null;
 
@@ -455,6 +497,8 @@ public class GrnDetailsActivity extends AppCompatActivity {
 
                         Product_list.get(i).setRecevied_qty(total_qty);
                         Product_list.get(i).setIs_product_model_match(true);
+                        Product_list.get(i).setProduct_model_entered(Product_list.get(i).getProduct_model_entered());
+                        Product_list.get(i).setProduct_model(Product_list.get(i).getProduct_model());
 
                         // Product_list.get(i).setBarcode_value("");
                         Product_list.get(i).setScanner_list(qr_scanner_list.get(Selected_product_id));
@@ -591,8 +635,6 @@ public class GrnDetailsActivity extends AppCompatActivity {
                         recyclerViewAdapter.setData(grnResponse.getProductmodel());
                     hideKeyboard();
 
-                    // progressDialog.dismiss();
-
                 }
                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
@@ -625,11 +667,9 @@ public class GrnDetailsActivity extends AppCompatActivity {
     private void ListViewValidation() {
         if (grnResponse != null) {
             if (add_min_qty) {
-                Gson gson = new GsonBuilder()
-                        .setLenient()
-                        .create();
-                String json = gson.toJson(grnResponse);
-                saveaction(json);
+
+
+                saveaction();
             } else {
                 ViewDialog ss = new ViewDialog();
                 ss.displayError("Min 1 qty required to proceed. ");
@@ -639,12 +679,31 @@ public class GrnDetailsActivity extends AppCompatActivity {
 
     }
 
-    void saveaction(String json) {
+    void saveaction() {
+//        Gson gson = new GsonBuilder()
+//                .setLenient()
+//                .create();
+//        String json = gson.toJson(grnResponse);
+
+
+//        Gson gson = new GsonBuilder()
+//                .setLenient()
+//                .create();
+//
+//
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Api.BoonBox_URL)
-                .addConverterFactory(GsonConverterFactory.create()) //Here we are using the GsonConverterFactory to directly convert json data to object
+              //  .addConverterFactory(StringConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(Api.BoonBox_URL)
+//               .addConverterFactory(GsonConverterFactory.create()) //Here we are using the GsonConverterFactory to directly convert json data to object
+//                .build();
         Api api = retrofit.create(Api.class);
+//        JsonParser parser = new JsonParser();
+//        parser.parse(json);
         Call<ProductReceivedResponse> call = api.create_grn(grnResponse);
 
         call.enqueue(new Callback<ProductReceivedResponse>() {
@@ -654,12 +713,12 @@ public class GrnDetailsActivity extends AppCompatActivity {
                 String Grn_no = response.body().getGrn_no();
                 String api_msg = response.body().getApi_message();
                 if (response_status.equals("success")) {
-                    Toast.makeText(getApplicationContext(), "GRN Created" + Grn_no, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "GRN Created" + Grn_no, Toast.LENGTH_SHORT).show();
                     ViewDialog alert = new ViewDialog();
                     alert.showDialog(GrnDetailsActivity.this, "Sucesss", api_msg);
 
                 } else {
-                    Toast.makeText(getApplicationContext(), api_msg, Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(), api_msg, Toast.LENGTH_SHORT).show();
                     ViewDialog alert = new ViewDialog();
                     alert.showDialog(GrnDetailsActivity.this, "Failure", api_msg);
                 }
@@ -682,7 +741,7 @@ public class GrnDetailsActivity extends AppCompatActivity {
         public void displayError(String errmsg) {
 
             AlertDialog alertDialog = new AlertDialog.Builder(GrnDetailsActivity.this).create();
-            alertDialog.setTitle("Error");
+            alertDialog.setTitle("Message");
             alertDialog.setMessage(errmsg);
             alertDialog.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
                 @Override
@@ -727,5 +786,7 @@ public class GrnDetailsActivity extends AppCompatActivity {
 
         }
     }
+
+
 
 }

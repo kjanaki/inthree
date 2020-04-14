@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +56,7 @@ public class GrnListActivity extends AppCompatActivity {
 
     @BindView(R.id.clear_search)
     ImageView clear_search;
+    TextView emptyView;
 
     GRNListRecycleListAdapter recyclerViewAdapter;
 
@@ -65,6 +69,13 @@ public class GrnListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Purchase");
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // back button pressed
+                finish();
+            }
+        });
 //        if(getSupportActionBar()!=null){
 //            Drawable drawable= getResources().getDrawable(R.drawable.ic_launcher_background);
 //            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
@@ -80,6 +91,7 @@ public class GrnListActivity extends AppCompatActivity {
     private void init_component() {
         // Initalize the components in View
         recyclerView = findViewById(R.id.recyclerView);
+        emptyView = (TextView) findViewById(R.id.empty_view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewAdapter = new GRNListRecycleListAdapter();
@@ -110,7 +122,36 @@ public class GrnListActivity extends AppCompatActivity {
             }
         });
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-        load_grn_list();
+
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        }
+        if(connected){
+            load_grn_list();
+        }
+        else{
+
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                // setup the alert builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Message");
+                builder.setMessage("No Internet Connection. Kindly check your connectivity");
+
+                // add the buttons
+                builder.setPositiveButton("Continue", null);
+                builder.setNegativeButton("Cancel", null);
+
+                // create and show the alert dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+        }
+
 
     }
 
@@ -124,11 +165,13 @@ public class GrnListActivity extends AppCompatActivity {
                 grn_list_filter.add(list);
             }
         }
+
         recyclerViewAdapter.setData(grn_list_filter);
     }
 
 
     private void load_grn_list() {
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Api.BoonBox_URL)
                 .addConverterFactory(GsonConverterFactory.create()) //Here we are using the GsonConverterFactory to directly convert json data to object
@@ -153,14 +196,19 @@ public class GrnListActivity extends AppCompatActivity {
                     grn_list_full = grnResponse;
                     recyclerViewAdapter.setData(grnResponse);
                     findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    emptyView.setVisibility(View.GONE);
 
                 } else {
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
                     Toast.makeText(getApplicationContext(), po_api_msg, Toast.LENGTH_SHORT).show();
                 }
 
             }
             @Override
             public void onFailure(Call<GrnListResponse> call, Throwable t) {
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                emptyView.setVisibility(View.VISIBLE);
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
