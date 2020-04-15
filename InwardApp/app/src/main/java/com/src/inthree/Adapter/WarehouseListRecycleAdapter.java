@@ -19,6 +19,7 @@ import com.src.inthree.R;
 import com.src.inthree.WarehouseProductDetailsActivity;
 import com.src.inthree.model.CheckListResponse;
 import com.src.inthree.model.StockListResponse;
+import com.src.inthree.smartview;
 
 import java.util.ArrayList;
 import java.util.List;

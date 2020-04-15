@@ -2,12 +2,9 @@ package com.src.inthree.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,7 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.src.inthree.GrnDetailsActivity;
+import com.bumptech.glide.Glide;
 import com.src.inthree.OnLoadMoreListener;
 import com.src.inthree.R;
 import com.src.inthree.model.WarehouseProductListResponse;
@@ -39,24 +36,24 @@ public class WarehouseProductListAdapterScroll extends RecyclerView.Adapter<Recy
     private int lastVisibleItem, totalItemCount;
 
     public WarehouseProductListAdapterScroll(RecyclerView recyclerView, List<WarehouseProductListResponse.StockList> contacts, Activity activity) {
-        this.contacts = contacts;
+        this.warehouse_productlist_records = contacts;
         this.activity = activity;
 
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                totalItemCount = linearLayoutManager.getItemCount();
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                    if (onLoadMoreListener != null) {
-                        onLoadMoreListener.onLoadMore();
-                    }
-                    isLoading = true;
-                }
-            }
-        });
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                totalItemCount = linearLayoutManager.getItemCount();
+//                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+//                    if (onLoadMoreListener != null) {
+//                        onLoadMoreListener.onLoadMore();
+//                    }
+//                    isLoading = true;
+//                }
+//            }
+//        });
     }
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
         this.onLoadMoreListener = mOnLoadMoreListener;
@@ -64,7 +61,7 @@ public class WarehouseProductListAdapterScroll extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemViewType(int position) {
-        return contacts.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return warehouse_productlist_records.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
 
@@ -105,11 +102,18 @@ public class WarehouseProductListAdapterScroll extends RecyclerView.Adapter<Recy
             userViewHolder.product_name.setText((productModel.getProduct_name() == null) ? "" : productModel.getProduct_name());
             userViewHolder.good_qty.setText((productModel.getGood_stock() == null) ? "" : productModel.getGood_stock());
             userViewHolder.damaged_qty.setText((productModel.getDamaged_stock() == null) ? "" : productModel.getDamaged_stock());
-            if(productModel.getProduct_image()!=null){
-                Bitmap im= GrnDetailsActivity.getBitmapFromURL(productModel.getProduct_image().toString());
-                if(im!=null){
-                    userViewHolder.product_image.setImageBitmap(im);
-                }
+            if(productModel.getProduct_image()!=null && !productModel.getProduct_image().equals("")){
+               // Glide.with(this.activity).load(productModel.getProduct_image()).into(userViewHolder.product_image);
+                Glide
+                        .with(this.activity)
+                        .load(productModel.getProduct_image())
+                        .centerCrop()
+                        .placeholder(R.drawable.loading_spinner_img)
+                        .into(userViewHolder.product_image);
+//                Bitmap im= GrnDetailsActivity.getBitmapFromURL(productModel.getProduct_image().toString());
+//                if(im!=null){
+//                    userViewHolder.product_image.setImageBitmap(im);
+//                }
 
             }
         } else if (holder instanceof LoadingViewHolder) {
@@ -123,8 +127,8 @@ public class WarehouseProductListAdapterScroll extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemCount() {
-
-        return warehouse_productlist_records.size();
+        return warehouse_productlist_records == null ? 0 : warehouse_productlist_records.size();
+        //return warehouse_productlist_records.size();
     }
 
     public void setData(List<WarehouseProductListResponse.StockList> data) {
@@ -138,7 +142,7 @@ public class WarehouseProductListAdapterScroll extends RecyclerView.Adapter<Recy
 
         public LoadingViewHolder(View view) {
             super(view);
-            progressBar = (ProgressBar) view.findViewById(R.id.progressBar1);
+            progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         }
     }
 
