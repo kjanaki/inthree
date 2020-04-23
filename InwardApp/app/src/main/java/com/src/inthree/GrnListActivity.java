@@ -16,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -123,6 +124,7 @@ public class GrnListActivity extends AppCompatActivity {
         });
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
 
+
         boolean connected = false;
         ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
@@ -132,6 +134,7 @@ public class GrnListActivity extends AppCompatActivity {
         }
         if(connected){
             load_grn_list();
+            hideKeyboard();
         }
         else{
 
@@ -197,11 +200,13 @@ public class GrnListActivity extends AppCompatActivity {
                     recyclerViewAdapter.setData(grnResponse);
                     findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                     emptyView.setVisibility(View.GONE);
+                    hideKeyboard();
 
                 } else {
                     findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                     emptyView.setVisibility(View.VISIBLE);
                     Toast.makeText(getApplicationContext(), po_api_msg, Toast.LENGTH_SHORT).show();
+                    hideKeyboard();
                 }
 
             }
@@ -210,9 +215,11 @@ public class GrnListActivity extends AppCompatActivity {
                 findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                 emptyView.setVisibility(View.VISIBLE);
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                hideKeyboard();
             }
 
         });
+        hideKeyboard();
 
     }
 
@@ -244,4 +251,12 @@ public class GrnListActivity extends AppCompatActivity {
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
+
+    private void hideKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }

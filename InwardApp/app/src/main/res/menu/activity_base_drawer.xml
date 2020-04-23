@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_dashboard"
+                android:title="Dashboard" />
+        </menu>
+    </item>
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_purchase"
+            android:icon="@drawable/purchase"
+            android:title="Purchase" />
+        <item
+            android:id="@+id/nav_sale"
+            android:icon="@drawable/sales"
+            android:title="Sales" />
+        <item
+            android:id="@+id/nav_stock"
+            android:icon="@drawable/stock"
+            android:title="Stock" />
+        <item
+            android:id="@+id/nav_checklist"
+            android:icon="@drawable/checklist_img"
+            android:title="Checklist" />
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/search"
+            android:title="Search" />
+        <item
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/checklist_img"
+            android:title="Checklist" />
+
+
+    </group>
+
+    <!--    <item android:title="Communicate">-->
+    <!--        <menu>-->
+    <!--            <item-->
+    <!--                android:id="@+id/nav_share"-->
+    <!--                android:icon="@drawable/ic_menu_share"-->
+    <!--                android:title="@string/menu_share" />-->
+    <!--            <item-->
+    <!--                android:id="@+id/nav_send"-->
+    <!--                android:icon="@drawable/ic_menu_send"-->
+    <!--                android:title="@string/menu_send" />-->
+    <!--        </menu>-->
+    <!--    </item>-->
+
+</menu>

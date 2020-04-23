@@ -26,7 +26,7 @@ public interface Api {
 
    // public static String BASE_URL;
  public String BoonBox_URL ="http://dev.in3access.in";
- // public String BoonBox_URL ="http://testcloud.in3access.in";
+// public String BoonBox_URL ="http://testcloud.in3access.in";
 
     @POST("/bbid/bb_po_user.php/")
     Call <LoginResponse> get_authincation(@Body LoginRequest login) ;
